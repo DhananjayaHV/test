@@ -331,6 +331,7 @@ are called anonymous functions or lambda functions.
 The main purpose of anonymous function is just for instant use(i.e for one time usage)
 
 Normal Function:
+
 We can define by using def keyword.
 
 def squareIt(n):
@@ -351,19 +352,172 @@ print(s(2,4))
 Note:
 Lambda Function internally returns expression value and we are not required to write
 return statement explicitly.
+
 Note: Sometimes we can pass function as argument to another function. In such cases
 lambda functions are best choice.
 
 We can use lambda functions very commonly with filter(),map() and reduce() functions,b'z
 these functions expect function as argument.
 
+Decorators:
+==========
+
+
+
+def swap(func):
+
+    def inner(a,b):
+        if b>a:
+            a,b=b,a
+        return func(a,b)
+    return inner
+
+
+
+@swap
+def div(a,b):
+    return a/b
+
+print(div(2,4))
+
+
+def smart(func):
+
+    def inner(name):
+        if name=="dhanu":
+             print('hi dhananjay')
+        else:
+            func(name)
+    return inner
+
+@smart
+def wish(name):
+    print('max')
+
+a=wish('dhanu1')
+print(a)
+
+
+Decorator Chaining
+===================
+We can define multiple decorators for the same function and all these decorators will
+form Decorator Chaining.
+
+Eg:
+@decor1
+@decor
+def num():
+
+For num() function we are applying 2 decorator functions. First inner decorator will work
+and then outer decorator.
+
+
+def func1(func):
+
+    def inner():
+        print("Hello")
+        func()
+    return inner()
+
+def func2(func):
+
+    def inner():
+        print("Second decorator")
+        func()
+    return inner
+
+@func2
+@func1
+def num():
+    return "dhanu"
+
+print(num)
+
+
+
+def decor(func):
+    def inner(x):
+        value=func(x)
+        print("dec1",value)
+        if value%2==0:
+            # a=value+1
+            pass
+        return value+1
+    return inner
+
+def decor1(func):
+    def inner(x):
+        value=func(x)
+        print(value)
+        if value%2==1:
+            print("Not completed")
+        else:
+            print("value")
+        return value+1
+    return inner
+
+
+@decor1
+@decor
+def num(x):
+    print("My function")
+    # print("hello")
+    x+=1
+    return x
+
+
+print(num(4))
+
 
 
 '''
-a=['a','b','v']
-b=['d','e','f']
-res=[]
+def smart(fun):
+    def inner(a,b):
+        if a%2==0 and b%2==0:
+            a=fun(a,b)
+        else:
+            print("Not even numbers")
+        return a
+    return inner
 
-for i in a:
-    res.append(a[int(i)]*b[int(i)])
-    print(res)
+
+@smart
+def add(x,y):
+    return x+y
+
+# print(add(2,4))
+
+
+
+def decor(func):
+    def inner(x):
+        value=func(x)
+        print("dec1",value)
+        if value%2==0:
+            # a=value+1
+            pass
+        return f'decor1 output {value + 1}'
+    return inner
+
+def decor1(func):
+    def inner1(x):
+        value=func(x)
+        print(value)
+        if value%2==1:
+            print("Not completed")
+        else:
+            print("value")
+        return value+1
+    return inner1
+
+
+@decor1
+@decor
+def num(x):
+    print("My function")
+    # print("hello")
+    x+=1
+    return x
+
+
+print(num(4))
